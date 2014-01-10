@@ -10,7 +10,7 @@ taiwanAreaFile = 'tmpData/TWarea.data'
 taiwanZipCodeFile = 'tmpData/zip5.data'
 
 insertTaiwanCity = (req, res, next) ->
-  token = '5699F4461D55D57E2A9B9F5923323'
+  token = '1658F7ED9FBACF737B58FE3DA1933'
   taiwanCity = fs.readFileSync taiwanCityFile, 'utf8'
   cities = taiwanCity.split '\n'
   if not req.params.token or req.params.token isnt token
@@ -33,7 +33,7 @@ insertTaiwanCity = (req, res, next) ->
   return
 
 insertTaiwanArea = (req, res, next) ->
-  token = '775943BD916981C1B9FF52DA29B1E'
+  token = '1658F7ED9FBACF737B58FE3DA1933'
   taiwanArea = fs.readFileSync taiwanAreaFile, 'utf8'
   areas = taiwanArea.split '\n'
   if not req.params.token or req.params.token isnt token
@@ -57,7 +57,7 @@ insertTaiwanArea = (req, res, next) ->
   return
 
 insertTaiwanZipCode = (req, res, next) ->
-  token = 'C3D4E96FC83F2ED3674AD11CD3ECC'
+  token = '1658F7ED9FBACF737B58FE3DA1933'
   taiwanZipCodes = fs.readFileSync taiwanZipCodeFile, 'utf8'
   zipCodes = taiwanZipCodes.split '\n'
   if not req.params.token or req.params.token isnt token
@@ -104,6 +104,9 @@ insertTaiwanZipCode = (req, res, next) ->
 
 getCity = (req, res, next) ->
   token = '1658F7ED9FBACF737B58FE3DA1933'
+  res.setHeader 'X-Powered-By', 'ZipCode'
+  res.setHeader 'Access-Control-Allow-Origin', '*'
+  res.setHeader '"Access-Control-Allow-Headers', 'X-Requested-With'
   country = req.params.country
   if not req.params.token or req.params.token isnt token or not country
     res.write req.params
@@ -119,7 +122,10 @@ getCity = (req, res, next) ->
   return
 
 getArea = (req, res, next) ->
-  token = 'DD4A26913FA6118E36BFA6741DD91'
+  token = '1658F7ED9FBACF737B58FE3DA1933'
+  res.setHeader 'X-Powered-By', 'ZipCode'
+  res.setHeader 'Access-Control-Allow-Origin', '*'
+  res.setHeader '"Access-Control-Allow-Headers', 'X-Requested-With'
   city = req.params.city
   if not req.params.token or req.params.token isnt token or not city
     res.write 'Error, please recheck to administrator'
@@ -135,13 +141,14 @@ getArea = (req, res, next) ->
   return
 
 getZipCode = (req, res, next) ->
-  token = '8FC282BCF8E63E267F66E63A75A1D'
+  token = '1658F7ED9FBACF737B58FE3DA1933'
+  res.setHeader 'X-Powered-By', 'ZipCode'
+  res.setHeader 'Access-Control-Allow-Origin', '*'
+  res.setHeader '"Access-Control-Allow-Headers', 'X-Requested-With'
   addrSource = req.params.addr
   zipJSON =
     zipCode: ''
     addrSource: addrSource
-
-  res.setHeader 'X-Powered-By', 'ZipCode'
   if not req.params.token or req.params.token isnt token or not addrSource
     res.write 'Error, please recheck to administrator'
     res.end()
@@ -291,6 +298,8 @@ server = restify.createServer(
 
 server.use restify.queryParser()
 server.use restify.bodyParser()
+server.use restify.jsonp()
+server.use restify.gzipResponse()
 server.get '/insertTaiwanCity', insertTaiwanCity
 server.get '/insertTaiwanArea', insertTaiwanArea
 server.get '/insertTaiwanZipCode', insertTaiwanZipCode

@@ -24,7 +24,7 @@
 
   insertTaiwanCity = function(req, res, next) {
     var cities, taiwanCity, token;
-    token = '5699F4461D55D57E2A9B9F5923323';
+    token = '1658F7ED9FBACF737B58FE3DA1933';
     taiwanCity = fs.readFileSync(taiwanCityFile, 'utf8');
     cities = taiwanCity.split('\n');
     if (!req.params.token || req.params.token !== token) {
@@ -51,7 +51,7 @@
 
   insertTaiwanArea = function(req, res, next) {
     var areas, taiwanArea, token;
-    token = '775943BD916981C1B9FF52DA29B1E';
+    token = '1658F7ED9FBACF737B58FE3DA1933';
     taiwanArea = fs.readFileSync(taiwanAreaFile, 'utf8');
     areas = taiwanArea.split('\n');
     if (!req.params.token || req.params.token !== token) {
@@ -79,7 +79,7 @@
 
   insertTaiwanZipCode = function(req, res, next) {
     var taiwanZipCodes, token, zipCodes;
-    token = 'C3D4E96FC83F2ED3674AD11CD3ECC';
+    token = '1658F7ED9FBACF737B58FE3DA1933';
     taiwanZipCodes = fs.readFileSync(taiwanZipCodeFile, 'utf8');
     zipCodes = taiwanZipCodes.split('\n');
     if (!req.params.token || req.params.token !== token) {
@@ -130,6 +130,9 @@
   getCity = function(req, res, next) {
     var country, token;
     token = '1658F7ED9FBACF737B58FE3DA1933';
+    res.setHeader('X-Powered-By', 'ZipCode');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('"Access-Control-Allow-Headers', 'X-Requested-With');
     country = req.params.country;
     if (!req.params.token || req.params.token !== token || !country) {
       res.write(req.params);
@@ -152,7 +155,10 @@
 
   getArea = function(req, res, next) {
     var city, token;
-    token = 'DD4A26913FA6118E36BFA6741DD91';
+    token = '1658F7ED9FBACF737B58FE3DA1933';
+    res.setHeader('X-Powered-By', 'ZipCode');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('"Access-Control-Allow-Headers', 'X-Requested-With');
     city = req.params.city;
     if (!req.params.token || req.params.token !== token || !city) {
       res.write('Error, please recheck to administrator');
@@ -175,13 +181,15 @@
 
   getZipCode = function(req, res, next) {
     var addrElement, addrSource, token, zipJSON, zipQuery;
-    token = '8FC282BCF8E63E267F66E63A75A1D';
+    token = '1658F7ED9FBACF737B58FE3DA1933';
+    res.setHeader('X-Powered-By', 'ZipCode');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('"Access-Control-Allow-Headers', 'X-Requested-With');
     addrSource = req.params.addr;
     zipJSON = {
       zipCode: '',
       addrSource: addrSource
     };
-    res.setHeader('X-Powered-By', 'ZipCode');
     if (!req.params.token || req.params.token !== token || !addrSource) {
       res.write('Error, please recheck to administrator');
       res.end();
@@ -438,6 +446,10 @@
   server.use(restify.queryParser());
 
   server.use(restify.bodyParser());
+
+  server.use(restify.jsonp());
+
+  server.use(restify.gzipResponse());
 
   server.get('/insertTaiwanCity', insertTaiwanCity);
 
