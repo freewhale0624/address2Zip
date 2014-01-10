@@ -106,6 +106,7 @@ getCity = (req, res, next) ->
   token = '1658F7ED9FBACF737B58FE3DA1933'
   country = req.params.country
   if not req.params.token or req.params.token isnt token or not country
+    res.write req.params
     res.write 'Error, please recheck to administrator'    
     res.end()
   else
@@ -121,7 +122,8 @@ getArea = (req, res, next) ->
   token = 'DD4A26913FA6118E36BFA6741DD91'
   city = req.params.city
   if not req.params.token or req.params.token isnt token or not city
-    res.write 'Error, please recheck to administrator'    
+    res.write 'Error, please recheck to administrator'
+    res.write req.params
     res.end()
   else
     MongoClient.connect CONN_STRING, (err, db) ->
@@ -288,11 +290,12 @@ server = restify.createServer(
 )
 
 server.use restify.queryParser()
+server.use restify.bodyParser()
 server.get '/insertTaiwanCity', insertTaiwanCity
 server.get '/insertTaiwanArea', insertTaiwanArea
 server.get '/insertTaiwanZipCode', insertTaiwanZipCode
-server.get '/getZipCode', getZipCode
-server.get '/getCity', getCity
-server.get '/getArea', getArea
-server.listen 1357, ->
+server.post '/getZipCode', getZipCode
+server.post '/getCity', getCity
+server.post '/getArea', getArea
+server.listen 1339, ->
   console.log '%s listening at %s', server.name, server.url
