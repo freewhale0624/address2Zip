@@ -198,7 +198,6 @@ exports.decomposeScope = (scope, number) ->
 				scopeEle = scopeEleVal
 
 		else
-			console.log number + ' : case' + num + ': ' + scope+ '\n'
 			return null
 			#fs.appendFile 'default.txt', 'case' + num + ': ' + scope+ '\n'
 			#logError = logError + number + ' : case' + num + ': ' + scope+ '\n'
@@ -465,8 +464,6 @@ exports.isInZipDataScope = (zipData, addrElement) ->
 	min = zipData.laneMin || zipData.alleyMin || zipData.noMin
 	max = zipData.laneMax || zipData.alleyMax || zipData.noMax
 	if zipData.laneOdevity
-		console.log zipData
-		console.log zipUtility.isMatchOdevityAndRange zipData.noOdevity, min, max, addrContrast
 		return zipUtility.isMatchOdevityAndRange zipData.laneOdevity, min, max, addrContrast
 	else if !(max || min)
 		return true
@@ -474,8 +471,6 @@ exports.isInZipDataScope = (zipData, addrElement) ->
 	min = zipData.alleyMin || zipData.noMin
 	max = zipData.alleyMax || zipData.noMax
 	if zipData.alleyOdevity
-		console.log zipData
-		console.log zipUtility.isMatchOdevityAndRange zipData.noOdevity, min, max, addrContrast
 		return zipUtility.isMatchOdevityAndRange zipData.alleyOdevity, min, max, addrContrast
 	else if !(max || min)
 		return true
@@ -483,8 +478,6 @@ exports.isInZipDataScope = (zipData, addrElement) ->
 	min = zipData.noMin
 	max = zipData.noMax
 	if zipData.noOdevity
-		console.log zipData
-		console.log zipUtility.isMatchOdevityAndRange zipData.noOdevity, min, max, addrContrast
 		return zipUtility.isMatchOdevityAndRange zipData.noOdevity, min, max, addrContrast
 	else if !(max || min)
 		return true
@@ -496,7 +489,6 @@ exports.isInZipDataScope = (zipData, addrElement) ->
 	else if !(max || min)
 		return true
 
-	console.log 'end '
 
 
 

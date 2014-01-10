@@ -14,8 +14,6 @@
 
   db = require('./config/my.conf');
 
-  console.log(db.DB_HOST);
-
   CONN_STRING = 'mongodb://' + (db.DB_USER !== '' ? db.DB_USER : '') + (db.DB_PASSWORD !== '' ? ':' + db.DB_PASSWORD : '') + (db.DB_USER !== '' ? '@' : '') + db.DB_HOST + ':' + db.DB_PORT + '/' + db.DB_NAME;
 
   taiwanCityFile = 'tmpData/TWcity.data';
@@ -26,7 +24,7 @@
 
   insertTaiwanCity = function(req, res, next) {
     var cities, taiwanCity, token;
-    token = 'a32e1ce38b25461d113af9326df5813c';
+    token = '5699F4461D55D57E2A9B9F5923323';
     taiwanCity = fs.readFileSync(taiwanCityFile, 'utf8');
     cities = taiwanCity.split('\n');
     if (!req.params.token || req.params.token !== token) {
@@ -46,13 +44,14 @@
           }
         });
       });
+      res.write('Done!');
       res.end();
     }
   };
 
   insertTaiwanArea = function(req, res, next) {
     var areas, taiwanArea, token;
-    token = 'a32e1ce38b2zE76K38V6j5466df5813c';
+    token = '775943BD916981C1B9FF52DA29B1E';
     taiwanArea = fs.readFileSync(taiwanAreaFile, 'utf8');
     areas = taiwanArea.split('\n');
     if (!req.params.token || req.params.token !== token) {
@@ -73,19 +72,19 @@
           }
         });
       });
+      res.write('Done!');
       res.end();
     }
   };
 
   insertTaiwanZipCode = function(req, res, next) {
     var taiwanZipCodes, token, zipCodes;
-    token = 'a32eQWE38bE76sdK38VADFQ66df5813c';
+    token = 'C3D4E96FC83F2ED3674AD11CD3ECC';
     taiwanZipCodes = fs.readFileSync(taiwanZipCodeFile, 'utf8');
     zipCodes = taiwanZipCodes.split('\n');
     if (!req.params.token || req.params.token !== token) {
       res.write('Error, please recheck to administrator');
       res.end();
-      return;
     } else {
       MongoClient.connect(CONN_STRING, function(err, db) {
         db.createCollection('zip', function(err, collection) {
@@ -123,13 +122,14 @@
           }
         });
       });
+      res.write('Done!');
       res.end();
     }
   };
 
   getCity = function(req, res, next) {
     var country, token;
-    token = 'ad0adxe38b25461d113af9pmmae5813c';
+    token = '1658F7ED9FBACF737B58FE3DA1933';
     country = req.params.country;
     if (!req.params.token || req.params.token !== token || !country) {
       res.write('Error, please recheck to administrator');
@@ -138,12 +138,12 @@
       MongoClient.connect(CONN_STRING, function(err, db) {
         var countryCollection;
         countryCollection = db.collection('country');
-        countryCollection.find({
+        return countryCollection.find({
           country: country
         }).toArray(function(err, cities) {
           res.write(JSON.stringify(cities));
           res.end();
-          db.close;
+          return db.close;
         });
       });
     }
@@ -151,7 +151,7 @@
 
   getArea = function(req, res, next) {
     var city, token;
-    token = 'ad0a86gsdb25461d1dsawcpmmae5813c';
+    token = 'DD4A26913FA6118E36BFA6741DD91';
     city = req.params.city;
     if (!req.params.token || req.params.token !== token || !city) {
       res.write('Error, please recheck to administrator');
@@ -160,12 +160,12 @@
       MongoClient.connect(CONN_STRING, function(err, db) {
         var cityCollection;
         cityCollection = db.collection('city');
-        cityCollection.find({
+        return cityCollection.find({
           city: city
         }).toArray(function(err, areas) {
           res.write(JSON.stringify(areas));
           res.end();
-          db.close;
+          return db.close;
         });
       });
     }
@@ -173,7 +173,7 @@
 
   getZipCode = function(req, res, next) {
     var addrElement, addrSource, token, zipJSON, zipQuery;
-    token = 'M21gFaV54pzE76K38V6j4Kd9YM195K2S';
+    token = '8FC282BCF8E63E267F66E63A75A1D';
     addrSource = req.params.addr;
     zipJSON = {
       zipCode: '',
@@ -182,15 +182,15 @@
     res.setHeader('X-Powered-By', 'ZipCode');
     if (!req.params.token || req.params.token !== token || !addrSource) {
       res.write('Error, please recheck to administrator');
+      res.end();
     } else {
       addrElement = zipUtility.decomposeAddr(addrSource);
-      console.log(addrElement);
       zipQuery = {
         city: addrElement.city,
         area: addrElement.area,
         road: addrElement.road
       };
-      return MongoClient.connect(CONN_STRING, function(err, db) {
+      MongoClient.connect(CONN_STRING, function(err, db) {
         var addrZip, zipCollection;
         zipCollection = db.collection('zip');
         addrZip = void 0;
@@ -260,7 +260,6 @@
                     addrZip = zipData;
                   }
                 }
-                console.log(addrElement);
                 if (addrZip) {
                   return callback('success', addrZip);
                 } else {
@@ -416,10 +415,9 @@
           if (message === 'success') {
             zipJSON.zipCode = addrZip.zipcode;
           }
-          console.log(addrZip);
           res.write(JSON.stringify(zipJSON));
           res.end();
-          db.close();
+          return db.close();
         });
       });
     }

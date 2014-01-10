@@ -235,7 +235,6 @@
         });
         break;
       default:
-        console.log(number + ' : case' + num + ': ' + scope + '\n');
         return null;
     }
     return scopeEle;
@@ -570,8 +569,6 @@
     min = zipData.laneMin || zipData.alleyMin || zipData.noMin;
     max = zipData.laneMax || zipData.alleyMax || zipData.noMax;
     if (zipData.laneOdevity) {
-      console.log(zipData);
-      console.log(zipUtility.isMatchOdevityAndRange(zipData.noOdevity, min, max, addrContrast));
       return zipUtility.isMatchOdevityAndRange(zipData.laneOdevity, min, max, addrContrast);
     } else if (!(max || min)) {
       return true;
@@ -579,8 +576,6 @@
     min = zipData.alleyMin || zipData.noMin;
     max = zipData.alleyMax || zipData.noMax;
     if (zipData.alleyOdevity) {
-      console.log(zipData);
-      console.log(zipUtility.isMatchOdevityAndRange(zipData.noOdevity, min, max, addrContrast));
       return zipUtility.isMatchOdevityAndRange(zipData.alleyOdevity, min, max, addrContrast);
     } else if (!(max || min)) {
       return true;
@@ -588,8 +583,6 @@
     min = zipData.noMin;
     max = zipData.noMax;
     if (zipData.noOdevity) {
-      console.log(zipData);
-      console.log(zipUtility.isMatchOdevityAndRange(zipData.noOdevity, min, max, addrContrast));
       return zipUtility.isMatchOdevityAndRange(zipData.noOdevity, min, max, addrContrast);
     } else if (!(max || min)) {
       return true;
@@ -601,7 +594,6 @@
     } else if (!(max || min)) {
       return true;
     }
-    return console.log('end ');
   };
 
   exports.isMatchOdevityAndRange = function(odevity, min, max, addrElement) {

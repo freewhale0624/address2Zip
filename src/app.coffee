@@ -4,14 +4,13 @@ fs = require 'fs'
 MongoClient = require('mongodb').MongoClient
 zipUtility = require './zipCodeUtility'
 db = require './config/my.conf'
-console.log db.DB_HOST
 CONN_STRING = 'mongodb://' + ((if db.DB_USER isnt '' then db.DB_USER else '')) + ((if db.DB_PASSWORD isnt '' then ':' + db.DB_PASSWORD else '')) + ((if db.DB_USER isnt '' then '@' else '')) + db.DB_HOST + ':' + db.DB_PORT + '/' + db.DB_NAME
 taiwanCityFile = 'tmpData/TWcity.data'
 taiwanAreaFile = 'tmpData/TWarea.data'
 taiwanZipCodeFile = 'tmpData/zip5.data'
 
 insertTaiwanCity = (req, res, next) ->
-  token = 'a32e1ce38b25461d113af9326df5813c'
+  token = '5699F4461D55D57E2A9B9F5923323'
   taiwanCity = fs.readFileSync taiwanCityFile, 'utf8'
   cities = taiwanCity.split '\n'
   if not req.params.token or req.params.token isnt token
@@ -29,11 +28,12 @@ insertTaiwanCity = (req, res, next) ->
           i++
         return
       return
+    res.write 'Done!'
     res.end()
   return
 
 insertTaiwanArea = (req, res, next) ->
-  token = 'a32e1ce38b2zE76K38V6j5466df5813c'
+  token = '775943BD916981C1B9FF52DA29B1E'
   taiwanArea = fs.readFileSync taiwanAreaFile, 'utf8'
   areas = taiwanArea.split '\n'
   if not req.params.token or req.params.token isnt token
@@ -52,17 +52,17 @@ insertTaiwanArea = (req, res, next) ->
           i++
         return
       return
+    res.write 'Done!'
     res.end()
   return
 
 insertTaiwanZipCode = (req, res, next) ->
-  token = 'a32eQWE38bE76sdK38VADFQ66df5813c'
+  token = 'C3D4E96FC83F2ED3674AD11CD3ECC'
   taiwanZipCodes = fs.readFileSync taiwanZipCodeFile, 'utf8'
   zipCodes = taiwanZipCodes.split '\n'
   if not req.params.token or req.params.token isnt token
     res.write 'Error, please recheck to administrator'
     res.end()
-    return
   else
     MongoClient.connect CONN_STRING, (err, db) ->
       db.createCollection 'zip', (err, collection) ->
@@ -97,12 +97,13 @@ insertTaiwanZipCode = (req, res, next) ->
           i++
         return
       return
+    res.write 'Done!'
     res.end()
   return
  
 
 getCity = (req, res, next) ->
-  token = 'ad0adxe38b25461d113af9pmmae5813c'
+  token = '1658F7ED9FBACF737B58FE3DA1933'
   country = req.params.country
   if not req.params.token or req.params.token isnt token or not country
     res.write 'Error, please recheck to administrator'    
@@ -114,12 +115,10 @@ getCity = (req, res, next) ->
         res.write JSON.stringify(cities)
         res.end()
         db.close
-        return
-      return
   return
 
 getArea = (req, res, next) ->
-  token = 'ad0a86gsdb25461d1dsawcpmmae5813c'
+  token = 'DD4A26913FA6118E36BFA6741DD91'
   city = req.params.city
   if not req.params.token or req.params.token isnt token or not city
     res.write 'Error, please recheck to administrator'    
@@ -131,12 +130,10 @@ getArea = (req, res, next) ->
         res.write JSON.stringify(areas)
         res.end()
         db.close
-        return
-      return
   return
 
 getZipCode = (req, res, next) ->
-  token = 'M21gFaV54pzE76K38V6j4Kd9YM195K2S'
+  token = '8FC282BCF8E63E267F66E63A75A1D'
   addrSource = req.params.addr
   zipJSON =
     zipCode: ''
@@ -145,11 +142,10 @@ getZipCode = (req, res, next) ->
   res.setHeader 'X-Powered-By', 'ZipCode'
   if not req.params.token or req.params.token isnt token or not addrSource
     res.write 'Error, please recheck to administrator'
-    return
+    res.end()
   else    
     #解析地址 將其分解為 縣市,鄉鎮區,路街,[巷弄號]範圍
     addrElement = zipUtility.decomposeAddr addrSource
-    console.log addrElement
     # query 
     zipQuery =
       city: addrElement.city
@@ -200,7 +196,6 @@ getZipCode = (req, res, next) ->
             return next(err)  if err
             for zipData in zipDatas
               addrZip = zipData if zipUtility.isInZipDataScope(zipData, addrElement)
-            console.log addrElement
             if (addrZip) then callback('success', addrZip) else callback(null, addrElement)
 
         else
@@ -278,11 +273,10 @@ getZipCode = (req, res, next) ->
           callback 'failure'
       ], (message, addrZip) ->
         zipJSON.zipCode = addrZip.zipcode  if message is 'success'
-        console.log addrZip
         res.write JSON.stringify(zipJSON)
         res.end()
         db.close()
-        return
+  return
 
 
 ###
