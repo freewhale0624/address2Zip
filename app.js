@@ -132,7 +132,7 @@
     token = '1658F7ED9FBACF737B58FE3DA1933';
     res.setHeader('X-Powered-By', 'ZipCode');
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('"Access-Control-Allow-Headers', 'X-Requested-With');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With');
     country = req.params.country;
     if (!req.params.token || req.params.token !== token || !country) {
       res.write(req.params);
@@ -158,7 +158,7 @@
     token = '1658F7ED9FBACF737B58FE3DA1933';
     res.setHeader('X-Powered-By', 'ZipCode');
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('"Access-Control-Allow-Headers', 'X-Requested-With');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With');
     city = req.params.city;
     if (!req.params.token || req.params.token !== token || !city) {
       res.write('Error, please recheck to administrator');
@@ -184,7 +184,7 @@
     token = '1658F7ED9FBACF737B58FE3DA1933';
     res.setHeader('X-Powered-By', 'ZipCode');
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('"Access-Control-Allow-Headers', 'X-Requested-With');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With');
     addrSource = req.params.addr;
     zipJSON = {
       zipCode: '',
