@@ -18,7 +18,13 @@ insertTaiwanCity = (req, res, next) ->
     res.end()
   else
     MongoClient.connect CONN_STRING, (err, db) ->
+      if err
+        console.log err
+        next()
       db.createCollection 'country', (err, collection) ->
+        if err
+          console.log err
+          next()
         i = 0
         while i < (cities.length - 1)
           collection.insert
@@ -41,7 +47,13 @@ insertTaiwanArea = (req, res, next) ->
     res.end()
   else
     MongoClient.connect CONN_STRING, (err, db) ->
+      if err
+        console.log err
+        next()
       db.createCollection 'city', (err, collection) ->
+        if err
+          console.log err
+          next()
         i = 0
         while i < (areas.length - 1)
           areaElement = areas[i].split ','
@@ -65,7 +77,13 @@ insertTaiwanZipCode = (req, res, next) ->
     res.end()
   else
     MongoClient.connect CONN_STRING, (err, db) ->
+      if err
+        console.log err
+        next()
       db.createCollection 'zip', (err, collection) ->
+        if err
+          console.log err
+          next()
         i = 0
         while i < (zipCodes.length - 1)
           zipElement = zipCodes[i].split(',')
@@ -114,8 +132,14 @@ getCity = (req, res, next) ->
     res.end()
   else
     MongoClient.connect CONN_STRING, (err, db) ->
+      if err
+        console.log err
+        next()
       countryCollection = db.collection('country')
       countryCollection.find({country: country}).toArray (err, cities) ->
+        if err
+          console.log err
+          next()
         res.write JSON.stringify(cities)
         res.end()
         db.close
@@ -133,14 +157,21 @@ getArea = (req, res, next) ->
     res.end()
   else
     MongoClient.connect CONN_STRING, (err, db) ->
+      if err
+        console.log err
+        next()
       cityCollection = db.collection('city')
       cityCollection.find({city: city}).toArray (err, areas) ->
+        if err
+          console.log err
+          next()
         res.write JSON.stringify(areas)
         res.end()
         db.close
   return
 
 getZipCode = (req, res, next) ->
+  console.time "getZipCode"
   token = '1658F7ED9FBACF737B58FE3DA1933'
   res.setHeader 'X-Powered-By', 'ZipCode'
   res.setHeader 'Access-Control-Allow-Origin', '*'
@@ -172,12 +203,17 @@ getZipCode = (req, res, next) ->
     #   ex: 原 road = 國泰, lane = 1, alley = 2  >> road = 國泰一巷, lane = '', alley = 2
     #   8.將road資料去'十'後查詢, 因有部份路名包含十 部份不包含 
     MongoClient.connect CONN_STRING, (err, db) ->
+      if err
+        console.log err
+        next()
       zipCollection = db.collection('zip')
       addrZip = undefined
       async.waterfall [(callback) ->
         if addrElement.road
           zipCollection.find(zipQuery).toArray (err, zipDatas) ->
-            return next(err)  if err
+            if err
+              console.log err
+              next()
             for zipData in zipDatas
               addrZip = zipData if zipUtility.isInZipDataScope(zipData, addrElement)
             if (addrZip) then callback('success', addrZip) else callback(null)
@@ -190,7 +226,9 @@ getZipCode = (req, res, next) ->
           addrElement.road = addrElement.road.replace(roadAdjust, '')
           zipQuery.road = addrElement.road
           zipCollection.find(zipQuery).toArray (err, zipDatas) ->
-            return next(err)  if err
+            if err
+              console.log err
+              next()
             for zipData in zipDatas
               addrZip = zipData if zipUtility.isInZipDataScope(zipData, addrElement)
             if (addrZip) then callback('success', addrZip) else callback(null, addrElement)
@@ -202,7 +240,9 @@ getZipCode = (req, res, next) ->
           addrElement.road = roadAdjust
           zipQuery.road = addrElement.road
           zipCollection.find(zipQuery).toArray (err, zipDatas) ->
-            return next(err)  if err
+            if err
+              console.log err
+              next()
             for zipData in zipDatas
               addrZip = zipData if zipUtility.isInZipDataScope(zipData, addrElement)
             if (addrZip) then callback('success', addrZip) else callback(null, addrElement)
@@ -222,7 +262,9 @@ getZipCode = (req, res, next) ->
           flag = true
         if flag
           zipCollection.find(zipQuery).toArray (err, zipDatas) ->
-            return next(err)  if err
+            if err
+              console.log err
+              next()
             for zipData in zipDatas
               addrZip = zipData if zipUtility.isInZipDataScope(zipData, addrElement)
             if (addrZip) then callback('success', addrZip) else callback(null, addrElement)
@@ -234,7 +276,9 @@ getZipCode = (req, res, next) ->
         if reg.test(addrElement.road)
           zipQuery.road = addrElement.road.replace(reg, '')
           zipCollection.find(zipQuery).toArray (err, zipDatas) ->
-            return next(err)  if err
+            if err
+              console.log err
+              next()
             for zipData in zipDatas
               addrZip = zipData if zipUtility.isInZipDataScope(zipData, addrElement)
             if (addrZip) then callback('success', addrZip) else callback(null, addrElement)
@@ -245,7 +289,9 @@ getZipCode = (req, res, next) ->
         if addrElement.road.indexOf('十') > 0
           zipQuery.road = addrElement.road.replace('十', '')
           zipCollection.find(zipQuery).toArray (err, zipDatas) ->
-            return next(err)  if err
+            if err
+              console.log err
+              next()
             for zipData in zipDatas
               addrZip = zipData if zipUtility.isInZipDataScope(zipData, addrElement)
             if (addrZip) then callback('success', addrZip) else callback(null, addrElement)
@@ -264,7 +310,9 @@ getZipCode = (req, res, next) ->
         if flag
           zipQuery.road = addrElement.road
           zipCollection.find(zipQuery).toArray (err, zipDatas) ->
-            return next(err)  if err
+            if err
+              console.log err
+              next()
             for zipData in zipDatas
               addrZip = zipData if zipUtility.isInZipDataScope(zipData, addrElement)
             if (addrZip) then callback('success', addrZip) else callback(null, addrElement)
@@ -274,7 +322,9 @@ getZipCode = (req, res, next) ->
         if addrElement.road.indexOf('十') > 0
           zipQuery.road = addrElement.road.replace('十', '')
           zipCollection.find(zipQuery).toArray (err, zipDatas) ->
-            return next(err)  if err
+            if err
+              console.log err
+              next()
             for zipData in zipDatas
               addrZip = zipData if zipUtility.isInZipDataScope(zipData, addrElement)
             if (addrZip) then callback('success', addrZip) else callback(null, addrElement)
@@ -285,6 +335,7 @@ getZipCode = (req, res, next) ->
         res.write JSON.stringify(zipJSON)
         res.end()
         db.close()
+    console.timeEnd "getZipCode"
   return
 
 
@@ -303,8 +354,8 @@ server.use restify.gzipResponse()
 server.get '/insertTaiwanCity', insertTaiwanCity
 server.get '/insertTaiwanArea', insertTaiwanArea
 server.get '/insertTaiwanZipCode', insertTaiwanZipCode
-server.post '/getZipCode', getZipCode
-server.post '/getCity', getCity
-server.post '/getArea', getArea
+server.get '/getZipCode', getZipCode
+server.get '/getCity', getCity
+server.get '/getArea', getArea
 server.listen 1339, ->
   console.log '%s listening at %s', server.name, server.url

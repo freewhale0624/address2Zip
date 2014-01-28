@@ -525,6 +525,8 @@ exports.isInRange = (min, max, addrElement) ->
 		return true
 	else
 		false
+
+		
 ###
 test = () ->
 	i = 0

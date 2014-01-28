@@ -32,8 +32,16 @@
       res.end();
     } else {
       MongoClient.connect(CONN_STRING, function(err, db) {
+        if (err) {
+          console.log(err);
+          next();
+        }
         db.createCollection('country', function(err, collection) {
           var i;
+          if (err) {
+            console.log(err);
+            next();
+          }
           i = 0;
           while (i < (cities.length - 1)) {
             collection.insert({
@@ -59,8 +67,16 @@
       res.end();
     } else {
       MongoClient.connect(CONN_STRING, function(err, db) {
+        if (err) {
+          console.log(err);
+          next();
+        }
         db.createCollection('city', function(err, collection) {
           var areaElement, i;
+          if (err) {
+            console.log(err);
+            next();
+          }
           i = 0;
           while (i < (areas.length - 1)) {
             areaElement = areas[i].split(',');
@@ -87,8 +103,16 @@
       res.end();
     } else {
       MongoClient.connect(CONN_STRING, function(err, db) {
+        if (err) {
+          console.log(err);
+          next();
+        }
         db.createCollection('zip', function(err, collection) {
           var area, city, i, road, scope, scopeEle, zipCode, zipElement;
+          if (err) {
+            console.log(err);
+            next();
+          }
           i = 0;
           while (i < (zipCodes.length - 1)) {
             zipElement = zipCodes[i].split(',');
@@ -141,10 +165,18 @@
     } else {
       MongoClient.connect(CONN_STRING, function(err, db) {
         var countryCollection;
+        if (err) {
+          console.log(err);
+          next();
+        }
         countryCollection = db.collection('country');
         return countryCollection.find({
           country: country
         }).toArray(function(err, cities) {
+          if (err) {
+            console.log(err);
+            next();
+          }
           res.write(JSON.stringify(cities));
           res.end();
           return db.close;
@@ -167,10 +199,18 @@
     } else {
       MongoClient.connect(CONN_STRING, function(err, db) {
         var cityCollection;
+        if (err) {
+          console.log(err);
+          next();
+        }
         cityCollection = db.collection('city');
         return cityCollection.find({
           city: city
         }).toArray(function(err, areas) {
+          if (err) {
+            console.log(err);
+            next();
+          }
           res.write(JSON.stringify(areas));
           res.end();
           return db.close;
@@ -181,6 +221,7 @@
 
   getZipCode = function(req, res, next) {
     var addrElement, addrSource, token, zipJSON, zipQuery;
+    console.time("getZipCode");
     token = '1658F7ED9FBACF737B58FE3DA1933';
     res.setHeader('X-Powered-By', 'ZipCode');
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -202,6 +243,10 @@
       };
       MongoClient.connect(CONN_STRING, function(err, db) {
         var addrZip, zipCollection;
+        if (err) {
+          console.log(err);
+          next();
+        }
         zipCollection = db.collection('zip');
         addrZip = void 0;
         return async.waterfall([
@@ -210,7 +255,8 @@
               return zipCollection.find(zipQuery).toArray(function(err, zipDatas) {
                 var zipData, _i, _len;
                 if (err) {
-                  return next(err);
+                  console.log(err);
+                  next();
                 }
                 for (_i = 0, _len = zipDatas.length; _i < _len; _i++) {
                   zipData = zipDatas[_i];
@@ -236,7 +282,8 @@
               return zipCollection.find(zipQuery).toArray(function(err, zipDatas) {
                 var zipData, _i, _len;
                 if (err) {
-                  return next(err);
+                  console.log(err);
+                  next();
                 }
                 for (_i = 0, _len = zipDatas.length; _i < _len; _i++) {
                   zipData = zipDatas[_i];
@@ -262,7 +309,8 @@
               return zipCollection.find(zipQuery).toArray(function(err, zipDatas) {
                 var zipData, _i, _len;
                 if (err) {
-                  return next(err);
+                  console.log(err);
+                  next();
                 }
                 for (_i = 0, _len = zipDatas.length; _i < _len; _i++) {
                   zipData = zipDatas[_i];
@@ -298,7 +346,8 @@
               return zipCollection.find(zipQuery).toArray(function(err, zipDatas) {
                 var zipData, _i, _len;
                 if (err) {
-                  return next(err);
+                  console.log(err);
+                  next();
                 }
                 for (_i = 0, _len = zipDatas.length; _i < _len; _i++) {
                   zipData = zipDatas[_i];
@@ -323,7 +372,8 @@
               return zipCollection.find(zipQuery).toArray(function(err, zipDatas) {
                 var zipData, _i, _len;
                 if (err) {
-                  return next(err);
+                  console.log(err);
+                  next();
                 }
                 for (_i = 0, _len = zipDatas.length; _i < _len; _i++) {
                   zipData = zipDatas[_i];
@@ -346,7 +396,8 @@
               return zipCollection.find(zipQuery).toArray(function(err, zipDatas) {
                 var zipData, _i, _len;
                 if (err) {
-                  return next(err);
+                  console.log(err);
+                  next();
                 }
                 for (_i = 0, _len = zipDatas.length; _i < _len; _i++) {
                   zipData = zipDatas[_i];
@@ -380,7 +431,8 @@
               return zipCollection.find(zipQuery).toArray(function(err, zipDatas) {
                 var zipData, _i, _len;
                 if (err) {
-                  return next(err);
+                  console.log(err);
+                  next();
                 }
                 for (_i = 0, _len = zipDatas.length; _i < _len; _i++) {
                   zipData = zipDatas[_i];
@@ -403,7 +455,8 @@
               return zipCollection.find(zipQuery).toArray(function(err, zipDatas) {
                 var zipData, _i, _len;
                 if (err) {
-                  return next(err);
+                  console.log(err);
+                  next();
                 }
                 for (_i = 0, _len = zipDatas.length; _i < _len; _i++) {
                   zipData = zipDatas[_i];
@@ -430,6 +483,7 @@
           return db.close();
         });
       });
+      console.timeEnd("getZipCode");
     }
   };
 
@@ -457,11 +511,11 @@
 
   server.get('/insertTaiwanZipCode', insertTaiwanZipCode);
 
-  server.post('/getZipCode', getZipCode);
+  server.get('/getZipCode', getZipCode);
 
-  server.post('/getCity', getCity);
+  server.get('/getCity', getCity);
 
-  server.post('/getArea', getArea);
+  server.get('/getArea', getArea);
 
   server.listen(1339, function() {
     return console.log('%s listening at %s', server.name, server.url);
