@@ -221,7 +221,6 @@
 
   getZipCode = function(req, res, next) {
     var addrElement, addrSource, token, zipJSON, zipQuery;
-    console.time("getZipCode");
     token = '1658F7ED9FBACF737B58FE3DA1933';
     res.setHeader('X-Powered-By', 'ZipCode');
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -483,7 +482,6 @@
           return db.close();
         });
       });
-      console.timeEnd("getZipCode");
     }
   };
 
@@ -511,11 +509,11 @@
 
   server.get('/insertTaiwanZipCode', insertTaiwanZipCode);
 
-  server.get('/getZipCode', getZipCode);
+  server.post('/getZipCode', getZipCode);
 
-  server.get('/getCity', getCity);
+  server.post('/getCity', getCity);
 
-  server.get('/getArea', getArea);
+  server.post('/getArea', getArea);
 
   server.listen(1339, function() {
     return console.log('%s listening at %s', server.name, server.url);
